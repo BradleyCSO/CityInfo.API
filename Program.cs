@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.StaticFiles;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders(); // Initially nothing to be logged
+builder.Logging.AddConsole(); // Add console to log
 
 // Add services to the container.
 builder.Services.AddControllers(options =>// Only AddControllers service registered as we will be building an API, which returns JSON responses
