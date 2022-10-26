@@ -19,15 +19,23 @@ namespace CityInfo.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PointOfInterestDto>> GetPointsOfInterest(int cityId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(get => get.Id == cityId);
-
-            if (city == null)
+            try
             {
-                _logger.LogInformation($"City with ID {cityId} wasn't found when accessing points of interest.");
-                return NotFound(); // In this case we should return a 404 because if the city passed within cityId doesn't exist, because the URI itself wouldn't be pointing to a mapped resource
-            }
+                var city = CitiesDataStore.Current.Cities.FirstOrDefault(get => get.Id == cityId);
 
-            return Ok(city.PointsOfInterest);
+                if (city == null)
+                {
+                    _logger.LogInformation($"City with ID {cityId} wasn't found when accessing points of interest.");
+                    return NotFound(); // In this case we should return a 404 because if the city passed within cityId doesn't exist, because the URI itself wouldn't be pointing to a mapped resource
+                }
+
+                return Ok(city.PointsOfInterest);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting points of interest for city with ID {cityId}", ex);
+                return StatusCode(500, "A problem occured while handling your request.");
+            }
         }
 
         [HttpGet("{pointofinterestid}", Name = "GetPointOfInterest")]
