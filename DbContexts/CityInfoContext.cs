@@ -13,6 +13,47 @@ namespace CityInfo.API.DbContexts
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<City>().HasData(
+                new City("New York City")
+                {
+                    Id = 1,
+                    Description = "The one with that big park."
+                },                
+                new City("London")
+                {
+                    Id = 2,
+                    Description = "The one with big red busses"
+                },                
+                new City("Paris")
+                {
+                    Id = 3,
+                    Description = "The one with that big tower."
+                });
+            modelBuilder.Entity<PointOfInterest>().HasData(
+                new PointOfInterest("Central Park")
+                {
+                    Id = 1,
+                    CityId = 1,
+                    Description = "Highly popular tourist destination."
+                },
+                new PointOfInterest("Tower Bridge")
+                {
+                    Id = 2,
+                    CityId = 2,
+                    Description = "Not to be confused with London Bridge"
+                },
+                new PointOfInterest("Eiffel Tower")
+                {
+                    Id = 3,
+                    CityId = 3,
+                    Description = "C'est excellent!"
+                });
+            base.OnModelCreating(modelBuilder);
+        }
+
         // One way to configure db context
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
