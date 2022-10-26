@@ -1,3 +1,4 @@
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
@@ -23,6 +24,11 @@ builder.Services.AddControllers(options =>// Only AddControllers service registe
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>(); // Allows us to inject a FileExtensionContentTypeProvider anywhere in our code
+
+// Transient lifetime services are created each time they're requested -- used in lightweight/stateless services
+// Scoped lifetime services are created once per request
+// Singleton lifetime services are created the first time they're requested, with each subsequent request using the same instance
+builder.Services.AddTransient<LocalMailService>();
 
 var app = builder.Build();
 
