@@ -1,8 +1,17 @@
 using Microsoft.AspNetCore.StaticFiles;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/cityinfo.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.ClearProviders(); // Initially nothing to be logged
-builder.Logging.AddConsole(); // Add console to log
+//builder.Logging.ClearProviders(); // Initially nothing to be logged
+//builder.Logging.AddConsole(); // Add console to log
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers(options =>// Only AddControllers service registered as we will be building an API, which returns JSON responses
