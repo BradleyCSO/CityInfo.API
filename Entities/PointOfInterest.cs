@@ -12,6 +12,8 @@ namespace CityInfo.API.Entities
         [MaxLength(50)]
         public string Name { get; set; }
         [ForeignKey("CityId")]
+        [MaxLength(200)]
+        public string Description { get; set; }
         public City? City { get; set; } // Navigation property. Foreign key -- thus a relationship between these classes will be created
         public int CityId { get; set; }
         
