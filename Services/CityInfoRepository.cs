@@ -49,5 +49,21 @@ namespace CityInfo.API.Services
             return await _context.PointsOfInterests
                 .Where(p => p.CityId == cityId).ToListAsync();
         }
+
+        public async Task AddPointOfInterestForCityAsync(int cityId, 
+            PointOfInterest pointOfInterest)
+        {
+            var city = await GetCityAsync(cityId, false);
+
+            if (city != null)
+            {
+                city.PointsOfInterest.Add(pointOfInterest);
+            }
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() >= 0; // true when 0 or more enties have succesfully been saved
+        }
     }
 }

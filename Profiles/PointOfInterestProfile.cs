@@ -7,6 +7,9 @@ namespace CityInfo.API.Profiles
         public PointOfInterestProfile()
         {
             CreateMap<Entities.PointOfInterest, Models.PointOfInterestDto>();
+
+            // PointOfInterest has more properties than PointOfInterestCreationDto, but AutoMapper ignores these
+            CreateMap<Models.PointOfInterestForCreationDto, Entities.PointOfInterest>(); 
         }
     }
 }
