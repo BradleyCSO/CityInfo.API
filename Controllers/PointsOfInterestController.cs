@@ -162,29 +162,32 @@ namespace CityInfo.API.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{pointofinterestid}")]
+        public async Task<ActionResult> DeletePointOfInterest(int cityId, int pointOfInterestId)
+        {
+            if (!await _cityInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
+
+            var pointOfInterestEntity =
+                await _cityInfoRepository.GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
+
+            if (pointOfInterestEntity == null)
+            {
+                return NotFound();
+            }
+
+            _cityInfoRepository.DeletePointOfInterest(pointOfInterestEntity); // Non-async because it is an in-memory operation, not I/O
+
+            await _cityInfoRepository.SaveChangesAsync();
+
+            _localMailService.Send("Point of interest deleted.",
+            $"Point of interest {pointOfInterestEntity.Name} " +
+            $"with id {pointOfInterestEntity.Id} has been deleted.");
+
+            return NoContent();
+        }
     }
-    //    [HttpDelete("{pointofinterestid}")]
-    //    public ActionResult DeletePointOfInterest(int cityId, int pointOfInterestId)
-    //    {
-    //        var city = _citiesDataStore.Cities.FirstOrDefault(c => c.Id == cityId);
-
-    //        if (city == null)
-    //        {
-    //            return NotFound();
-    //        }
-
-    //        var pointOfInterestFromStore = city.PointsOfInterest.
-    //            FirstOrDefault(c => c.Id == pointOfInterestId);
-
-    //        if (pointOfInterestFromStore == null)
-    //        {
-    //            return NotFound();
-    //        }
-
-    //        city.PointsOfInterest.Remove(pointOfInterestFromStore);
-    //        _localMailService.Send("Point of interest deleted.",
-    //            $"Point of interest {pointOfInterestFromStore.Name} " +
-    //            $"with id {pointOfInterestFromStore.Id} has been deleted.");
-
-    //        return NoContent();
 }
