@@ -8,6 +8,7 @@ namespace CityInfo.API.Services
         // https://stackoverflow.com/questions/2876616/returning-ienumerablet-vs-iqueryablet
         Task<IEnumerable<City>> GetCitiesAsync();
         Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest);
+        Task<bool> CityExistsAsync(int cityId);
         Task<PointOfInterest?> GetPointOfInterestForCityAsync(
             int cityId, int pointOfInterestId);
         Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(

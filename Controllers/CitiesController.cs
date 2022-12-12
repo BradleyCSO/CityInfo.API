@@ -41,17 +41,31 @@ namespace CityInfo.API.Controllers
             //return Ok(_citiesDataStore.Cities); // No not found as an empty collection would be a valid response body
         }
 
-        //[HttpGet("{id}")]
-        //public ActionResult<CityDto> GetCity(int id)
-        //{
-        //    //var cityToReturn = _citiesDataStore.Cities.FirstOrDefault(get => get.Id == id);
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCity(int id, bool includePointsOfInterest = false)
+        {
+            var city = await _cityInfoRepository.GetCityAsync(id, includePointsOfInterest);
 
-        //    //if (cityToReturn == null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
+            if (city == null)
+            {
+                return NotFound();
+            }
 
-        //    //return Ok(cityToReturn);
-        //}
+            if (includePointsOfInterest)
+            {
+                return Ok(_mapper.Map<CityDto>(city)); // Map cities WITH points of interest
+            }
+
+            return Ok(_mapper.Map<CityWithoutPointsOfInterestDto>(city)); // Otherwise map cities without points of interest
+
+            //var cityToReturn = _citiesDataStore.Cities.FirstOrDefault(get => get.Id == id);
+
+            //if (cityToReturn == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return Ok(cityToReturn);
+        }
     }
 }
