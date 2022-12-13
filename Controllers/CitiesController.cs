@@ -57,6 +57,12 @@ namespace CityInfo.API.Controllers
             //return Ok(_citiesDataStore.Cities); // No not found as an empty collection would be a valid response body
         }
 
+        /// <summary>
+        /// Get a city by id
+        /// </summary>
+        /// <param name="id">The id of the city to get</param>
+        /// <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
+        /// <returns>An IActionResult</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCity(int id, bool includePointsOfInterest = false)
         {
