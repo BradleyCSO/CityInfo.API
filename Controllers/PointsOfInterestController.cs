@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CityInfo.API.Controllers
 {
     [Route("api/cities/{cityId}/pointsofinterest")] // All class members have this initial route path
-    [Authorize(Policy = "MustBeFromLondon")]
+    //[Authorize(Policy = "MustBeFromLondon")]
     [ApiController]
     public class PointsOfInterestController : ControllerBase
     {
