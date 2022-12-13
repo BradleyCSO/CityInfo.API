@@ -32,6 +32,13 @@ namespace CityInfo.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> GetPointsOfInterest(int cityId)
         {
+            var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value; // ControllerBase exposes User (Claims)
+
+            if (!await _cityInfoRepository.CityNameMatchesCityId(cityId, cityName))
+            {
+                return Forbid(); // Returns 403: User is authenticated but doesn't have access
+            }
+
             if (!await _cityInfoRepository.CityExistsAsync(cityId))
             {
                 _logger.LogInformation($"City with ID {cityId} wasn't found when accessing points of interest.");
