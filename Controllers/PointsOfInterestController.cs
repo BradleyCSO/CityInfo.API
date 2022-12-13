@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/cities/{cityId}/pointsofinterest")] // All class members have this initial route path
-    //[Authorize(Policy = "MustBeFromLondon")]
     [ApiController]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}cities/{cityId}/pointsofinterest")] // All class members have this initial route path
+    //[Authorize(Policy = "MustBeFromLondon")]
     public class PointsOfInterestController : ControllerBase
     {
         private readonly ILogger<PointsOfInterestController> _logger;
@@ -32,12 +33,12 @@ namespace CityInfo.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> GetPointsOfInterest(int cityId)
         {
-            var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value; // ControllerBase exposes User (Claims)
+            //var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value; // ControllerBase exposes User (Claims)
 
-            if (!await _cityInfoRepository.CityNameMatchesCityId(cityId, cityName))
-            {
-                return Forbid(); // Returns 403: User is authenticated but doesn't have access
-            }
+            //if (!await _cityInfoRepository.CityNameMatchesCityId(cityId, cityName))
+            //{
+            //    return Forbid(); // Returns 403: User is authenticated but doesn't have access
+            //}
 
             if (!await _cityInfoRepository.CityExistsAsync(cityId))
             {
