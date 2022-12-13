@@ -8,7 +8,7 @@ using System.Text.Json;
 namespace CityInfo.API.Controllers
 {
     [ApiController] // Not necessary but improves development experience when building APIs, this should be documented as we go on
-    //[Authorize]
+    [Authorize]
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/cities")]
