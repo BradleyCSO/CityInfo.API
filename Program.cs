@@ -16,6 +16,9 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors();
+
 //builder.Logging.ClearProviders(); // Initially nothing to be logged
 //builder.Logging.AddConsole(); // Add console to log
 
@@ -126,6 +129,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+
+app.UseCors(
+    options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+);
 
 // Order matters for middleware,
 // before checking for endpoints and authorization,
