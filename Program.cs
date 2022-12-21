@@ -28,7 +28,9 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers(options =>// Only AddControllers service registered as we will be building an API, which returns JSON responses
 {
     options.ReturnHttpNotAcceptable = true; // Handle when user requests a response format that is not supported. RETURNS 406 Not Acceptable
-}).AddXmlDataContractSerializerFormatters().AddNewtonsoftJson();
+}).AddNewtonsoftJson();
+
+//AddXmlDataContractSerializerFormatters() for when we want an XML response
 
 // Transient lifetime services are created each time they're requested -- used in lightweight/stateless services
 // Scoped lifetime services are created once per request
