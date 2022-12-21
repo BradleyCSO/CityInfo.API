@@ -10,8 +10,8 @@ namespace CityInfo.API.Controllers
 {
     [ApiController]
     [ApiVersion("2.0")]
-    [Route("api/v{version:apiVersion}cities/{cityId}/pointsofinterest")] // All class members have this initial route path
-    [Authorize(Policy = "MustBeFromLondon")]
+    [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")] // All class members have this initial route path
+    //[Authorize(Policy = "MustBeFromLondon")]
     public class PointsOfInterestController : ControllerBase
     {
         private readonly ILogger<PointsOfInterestController> _logger;
