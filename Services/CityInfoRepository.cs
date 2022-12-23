@@ -24,7 +24,7 @@ namespace CityInfo.API.Services
         }
 
         public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
-            string? name, string? searchQuery, int pageNumber, int pageSize)
+            string? name, string? searchQuery, string? continent, string? country, int pageNumber, int pageSize)
         {
             // Collection to start from, for deferred execution
             var collection = _context.Cities as IQueryable<City>; 
@@ -40,6 +40,18 @@ namespace CityInfo.API.Services
                 searchQuery = searchQuery.Trim();
                 collection = collection.Where(a => a.Name.Contains(searchQuery)
                 || (a.Description != null && a.Description.Contains(searchQuery)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(continent))
+            {
+                searchQuery = continent.Trim();
+                collection = collection.Where(c => c.Continent == continent);
+            }
+
+            if (!string.IsNullOrWhiteSpace(country))
+            {
+                searchQuery = country.Trim();
+                collection = collection.Where(c => c.Country == country);
             }
 
             var totalItemCount = await collection.CountAsync();

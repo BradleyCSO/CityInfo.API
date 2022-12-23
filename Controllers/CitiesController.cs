@@ -27,7 +27,7 @@ namespace CityInfo.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities(
-            [FromQuery] string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
+            [FromQuery] string? name, string? searchQuery, string? continent, string? country, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > maxCitiesPageSize)
             {
@@ -35,7 +35,7 @@ namespace CityInfo.API.Controllers
             }
 
             var (cityEntities, paginationMetadata) = 
-                await _cityInfoRepository.GetCitiesAsync(name, searchQuery, pageNumber, pageSize);
+                await _cityInfoRepository.GetCitiesAsync(name, searchQuery, continent, country, pageNumber, pageSize);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
             
