@@ -14,5 +14,9 @@
         /// The description of the City
         /// </summary>
         public string? Description { get; set; }
+
+        public string? Continent { get; set; }
+      
+        public string? Country { get; set; }
     }
 }

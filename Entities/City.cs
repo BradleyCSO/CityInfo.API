@@ -13,6 +13,10 @@ namespace CityInfo.API.Entities
         public string Name { get; set; }
         [MaxLength(200)]
         public string? Description { get; set; }
+
+        public string? Continent { get; set; }
+
+        public string Country { get; set; }
         public ICollection<PointOfInterest> PointsOfInterest { get; set; } = new List<PointOfInterest>();
 
         public City(string name) // We want this City class to always have a name
