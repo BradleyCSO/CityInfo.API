@@ -52,12 +52,7 @@ namespace CityInfo.API.Services
 
             if (countries.Any())
             {
-                foreach (var country in countries)
-                {
-                    searchQuery = country.Trim();
-                    cityCollection = cityCollection.Union(collection.Where(c => c.Country == country));
-                }
-                collection = cityCollection;
+                collection = collection.Where(c => countries.Contains(c.Country));
             }
 
             var totalItemCount = await collection.CountAsync();
