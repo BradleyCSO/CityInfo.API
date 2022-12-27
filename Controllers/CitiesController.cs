@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CityInfo.API.Entities;
 using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace CityInfo.API.Controllers
     {
         private readonly ICityInfoRepository _cityInfoRepository;
         private readonly IMapper _mapper;
-        const int maxCitiesPageSize = 20;
+        const int maxCitiesPageSize = 2;
 
         public CitiesController(ICityInfoRepository cityInfoRepository, 
             IMapper mapper)
@@ -25,9 +26,24 @@ namespace CityInfo.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [Route("GetCountries")]
+        [HttpGet]
+        public async Task<IActionResult> GetCountriesAsync()
+        {
+            var countries = await _cityInfoRepository.GetCountriesAsync();
+
+            if (countries == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(countries);
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities(
-            [FromQuery] string? name, string? searchQuery, string? continent, string? country, int pageNumber = 1, int pageSize = 10)
+            [FromQuery] string? name, string? searchQuery, string? continent, [FromQuery] string[]? countries, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > maxCitiesPageSize)
             {
@@ -35,7 +51,7 @@ namespace CityInfo.API.Controllers
             }
 
             var (cityEntities, paginationMetadata) = 
-                await _cityInfoRepository.GetCitiesAsync(name, searchQuery, continent, country, pageNumber, pageSize);
+                await _cityInfoRepository.GetCitiesAsync(name, searchQuery, continent, countries, pageNumber, pageSize);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
             

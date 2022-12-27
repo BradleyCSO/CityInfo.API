@@ -1,5 +1,6 @@
 ﻿using CityInfo.API.DbContexts;
 using CityInfo.API.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.API.Services
@@ -24,10 +25,11 @@ namespace CityInfo.API.Services
         }
 
         public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
-            string? name, string? searchQuery, string? continent, string? country, int pageNumber, int pageSize)
+            string? name, string? searchQuery, string? continent, [FromQuery] string[]? countries, int pageNumber, int pageSize)
         {
             // Collection to start from, for deferred execution
-            var collection = _context.Cities as IQueryable<City>; 
+            var collection = _context.Cities as IQueryable<City>;
+            IQueryable<City> cityCollection = Enumerable.Empty<City>().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -48,10 +50,14 @@ namespace CityInfo.API.Services
                 collection = collection.Where(c => c.Continent == continent);
             }
 
-            if (!string.IsNullOrWhiteSpace(country))
+            if (countries.Any())
             {
-                searchQuery = country.Trim();
-                collection = collection.Where(c => c.Country == country);
+                foreach (var country in countries)
+                {
+                    searchQuery = country.Trim();
+                    cityCollection = cityCollection.Union(collection.Where(c => c.Country == country));
+                }
+                collection = cityCollection;
             }
 
             var totalItemCount = await collection.CountAsync();
@@ -65,12 +71,18 @@ namespace CityInfo.API.Services
                 .Take(pageSize)
                 .ToListAsync();
 
+
             return (collectionToReturn, paginationMetadata);
         }
 
         public async Task<bool> CityExistsAsync(int cityId)
         {
             return await _context.Cities.AnyAsync(c => c.Id == cityId);
+        }
+
+        public async Task<IEnumerable<string>> GetCountriesAsync()
+        {
+            return await _context.Cities.Select(c => c.Country).Distinct().ToListAsync();
         }
 
         public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
