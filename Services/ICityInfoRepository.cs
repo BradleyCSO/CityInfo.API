@@ -6,6 +6,7 @@ namespace CityInfo.API.Services
     public interface ICityInfoRepository
     {
         // https://stackoverflow.com/questions/2876616/returning-ienumerablet-vs-iqueryablet
+        Task<IEnumerable<string>> GetContinentsAsync();
         Task<IEnumerable<object>> GetCountriesAsync();
         Task<IEnumerable<City>> GetCitiesAsync();
         Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(string? name, string? searchQuery, string? continent, string?[] countries, int pageNumber, int pageSize);

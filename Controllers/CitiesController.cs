@@ -26,6 +26,20 @@ namespace CityInfo.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [Route("GetContinents")]
+        [HttpGet]
+        public async Task<IActionResult> GetContinentsAsync()
+        {
+            var continents = await _cityInfoRepository.GetContinentsAsync();
+
+            if (continents == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(continents);
+        }
+
         [Route("GetCountries")]
         [HttpGet]
         public async Task<IActionResult> GetCountriesAsync()

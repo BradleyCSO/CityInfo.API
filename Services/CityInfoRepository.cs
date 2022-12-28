@@ -75,6 +75,11 @@ namespace CityInfo.API.Services
             return await _context.Cities.AnyAsync(c => c.Id == cityId);
         }
 
+        public async Task<IEnumerable<string>> GetContinentsAsync()
+        {
+            return await _context.Cities.Select(c=> c.Continent).Distinct().ToListAsync();
+        }
+
         public async Task<IEnumerable<object>> GetCountriesAsync()
         {
             return await _context.Cities.Select(c => new { Country = c.Country, Continent = c.Continent }).Distinct().ToListAsync();
