@@ -75,9 +75,9 @@ namespace CityInfo.API.Services
             return await _context.Cities.AnyAsync(c => c.Id == cityId);
         }
 
-        public async Task<IEnumerable<string>> GetCountriesAsync()
+        public async Task<IEnumerable<object>> GetCountriesAsync()
         {
-            return await _context.Cities.Select(c => c.Country).Distinct().ToListAsync();
+            return await _context.Cities.Select(c => new { Country = c.Country, Continent = c.Continent }).Distinct().ToListAsync();
         }
 
         public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
