@@ -68,7 +68,8 @@ namespace CityInfo.API.Controllers
                 await _cityInfoRepository.GetCitiesAsync(name, searchQuery, continent, countries, pageNumber, pageSize);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
-            
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
+
             return Ok(_mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities));
 
             //var results = new List<CityWithoutPointsOfInterestDto>();
