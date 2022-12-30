@@ -22,8 +22,23 @@ namespace CityInfo.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Continent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageAltText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -33,26 +48,48 @@ namespace CityInfo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Description = "The one with that big park.",
+                            Continent = "North America",
+                            Country = "United States",
+                            Description = "New York is composed of five boroughs – Brooklyn, the Bronx, Manhattan, Queens and Staten Island - is home to 8.4 million people who speak more than 200 languages, hail from every corner of the globe, and, together, are the heart and soul of the most dynamic city in the world.",
+                            ImageAltText = "An image showing an aerial view of the New York skyline on a sunny afternoon.",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/new-york-skyline-sunny-afternoon-aerial-view-53728429.jpg",
                             Name = "New York City"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "The one with big red busses",
+                            Continent = "Europe",
+                            Country = "United Kingdom",
+                            Description = "Noisy and vibrant, London is a megalopolis of people, ideas and frenetic energy. The capital and largest city of England, and of the wider United Kingdom, it is also the largest city in Western Europe. Situated on the River Thames in South-East England, Greater London has an official population of a little over 8 million, but the estimate of between 12 and 14 million people in the greater metropolitan area better reflects its size and importance.",
+                            ImageAltText = "An image showing Tower Bridge on an evening with dark clouds.",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/tower-bridge-london-uk-38138737.jpg",
                             Name = "London"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "The one with that big tower.",
+                            Continent = "Europe",
+                            Country = "France",
+                            Description = "Paris has the reputation of being the most beautiful and romantic of all cities, brimming with historic associations and remaining vastly influential in the realms of culture, art, fashion, food and design.",
+                            ImageAltText = "A picture of the Eiffel Tower at sundown.",
+                            ImageUrl = "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075__480.jpg",
                             Name = "Paris"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Continent = "North America",
+                            Country = "United States",
+                            Description = "A major city and commercial hub in North Carolina. Its modern city center (Uptown) is home to the Levine Museum of the New South, which explores post–Civil War history in the South, and hands-on science displays at Discovery Place.",
+                            ImageAltText = "An image showing a series of North Carolina skylines.",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/charlotte-north-carolina-nc-drone-skyline-aerial-153829341.jpg",
+                            Name = "Charlotte"
                         });
                 });
 
@@ -70,6 +107,14 @@ namespace CityInfo.API.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageAltText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -79,29 +124,44 @@ namespace CityInfo.API.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("PointsOfInterests");
+                    b.ToTable("PointsOfInterests", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             CityId = 1,
-                            Description = "Highly popular tourist destination.",
+                            Description = "Central Park is an urban park in New York City located between the Upper West and Upper East Sides of Manhattan. It is the fifth-largest park in the city, covering 843 acres.",
+                            ImageAltText = "A morning taken directly in Central Park.",
+                            ImageUrl = "https://media.istockphoto.com/id/1309037300/photo/central-park-in-spring.jpg?b=1&s=170667a&w=0&k=20&c=nTMGmhXEwkB_s9gglwFX9qz74RbjG9caQryz36l02Sc=",
                             Name = "Central Park"
                         },
                         new
                         {
                             Id = 2,
                             CityId = 2,
-                            Description = "Not to be confused with London Bridge",
+                            Description = "Tower Bridge is a Grade I listed combined bascule and suspension bridge in London, built between 1886 and 1894, designed by Horace Jones and engineered by John Wolfe Barry with the help of Henry Marc Brunel.",
+                            ImageAltText = "An image of Tower Bridge in the evening.",
+                            ImageUrl = "https://media.istockphoto.com/id/1337592981/photo/tower-bridge-in-the-evening-london-england-uk.jpg?b=1&s=170667a&w=0&k=20&c=W3wH2itHMImP3ZAEk_ZDk3UHopEQ7B_k4SJs-wGZEL8=",
                             Name = "Tower Bridge"
                         },
                         new
                         {
                             Id = 3,
                             CityId = 3,
-                            Description = "C'est excellent!",
-                            Name = "Eiffel Tower"
+                            Description = "The Avenue des Champs-Elysees is an avenue in the 8th arrondissement of Paris, France, 1.9 kilometres long and 70 metres wide, running between the Place de la Concorde in the east and the Place Charles de Gaulle in the west, where the Arc de Triomphe is located.",
+                            ImageAltText = "An image of the Champs-Élysées taken at night.",
+                            ImageUrl = "https://thumbs.dreamstime.com/b/champs-elysees-arc-de-triomphe-night-paris-champs-elysees-arc-de-triomphe-night-paris-france-107377207.jpg",
+                            Name = "Champs-Elysees"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CityId = 4,
+                            Description = "The NASCAR Hall of Fame, located in Charlotte, North Carolina, honors drivers who have shown expert skill at NASCAR driving, all-time great crew chiefs and owners, broadcasters and other major contributors to competition within the sanctioning body.",
+                            ImageAltText = "A picture of the NASCAR Hall of Fame building, in Charlotte, North Carolina.",
+                            ImageUrl = "https://media.istockphoto.com/id/854657408/photo/nascar-hall-of-fame-in-charlotte-north-carolina-usa.jpg?s=612x612&w=0&k=20&c=5WNpQ-xkPjkUF8EQdVTw93fYsdmurJe4SRQf7m4kCmE=",
+                            Name = "NASCAR Hall of Fame"
                         });
                 });
 

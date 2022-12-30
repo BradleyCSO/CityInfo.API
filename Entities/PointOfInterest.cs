@@ -16,7 +16,9 @@ namespace CityInfo.API.Entities
         public string Description { get; set; }
         public City? City { get; set; } // Navigation property. Foreign key -- thus a relationship between these classes will be created
         public int CityId { get; set; }
-        
+        public string ImageUrl { get; set; }
+        public string ImageAltText { get; set; }
+
         public PointOfInterest(string name)
         {
             Name = name;
