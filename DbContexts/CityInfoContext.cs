@@ -50,7 +50,7 @@ namespace CityInfo.API.DbContexts
                     Description = "A major city and commercial hub in North Carolina. Its modern city center (Uptown) is home to the Levine Museum of the New South, which explores post–Civil War history in the South, and hands-on science displays at Discovery Place.",
                     Continent = "North America",
                     Country = "United States",
-                    ImageUrl = "https://thumbs.dreamstime.com/b/charlotte-north-carolina-nc-drone-skyline-aerial-153829341.jpg",
+                    ImageUrl = "https://media.istockphoto.com/id/1276994658/photo/fall-in-charlotte-nc.jpg?b=1&s=170667a&w=0&k=20&c=yI0cUp8q2xSHF8szoQIv5sVpAAQekyqMtv0FBQZermY=",
                     ImageAltText = "An image showing a series of North Carolina skylines."
                 });
             modelBuilder.Entity<PointOfInterest>().HasData(
