@@ -52,6 +52,24 @@ namespace CityInfo.API.DbContexts
                     Country = "United States",
                     ImageUrl = "https://media.istockphoto.com/id/1276994658/photo/fall-in-charlotte-nc.jpg?b=1&s=170667a&w=0&k=20&c=yI0cUp8q2xSHF8szoQIv5sVpAAQekyqMtv0FBQZermY=",
                     ImageAltText = "An image showing a series of North Carolina skylines."
+                },
+                new City("Huntingdon")
+                {
+                    Id = 5,
+                    Description = "Huntingdon is a market town in the Huntingdonshire district in Cambridgeshire, England. The town was given its town charter by King John in 1205. It was the county town of the historic county of Huntingdonshire. Oliver Cromwell was born there in 1599 and became one of its Members of Parliament in 1628.",
+                    Continent = "Europe",
+                    Country = "United Kingdom",
+                    ImageUrl = "https://www.harveyrobinson.co.uk/xml/cache/mceimages/hr-Huntingdon-Landmark.jpg",
+                    ImageAltText = "An image showing Huntingdon Town Centre in the morning."
+                },
+                new City("Brest")
+                {
+                    Id = 6,
+                    Description = "Brest is a port city in Brittany, in northwestern France, bisected by the Penfeld river. It’s known for its rich maritime history and naval base. At the mouth of the Penfeld, overlooking the harbor, is the National Navy Museum, housed in the medieval Château de Brest.",
+                    Continent = "Europe",
+                    Country = "France",
+                    ImageUrl = "https://images.france.fr/zeaejvyq9bhj/417nfQFcHe0uuuoMw2AoIO/874bf93f75529a0801d33f1c5d7dff0c/resizedshutterstock_151480559_place-ste-anne-rennes.jpg",
+                    ImageAltText = "An image showing a busy part of the City."
                 });
             modelBuilder.Entity<PointOfInterest>().HasData(
                 new PointOfInterest("Central Park")
@@ -85,6 +103,22 @@ namespace CityInfo.API.DbContexts
                     Description = "The NASCAR Hall of Fame, located in Charlotte, North Carolina, honors drivers who have shown expert skill at NASCAR driving, all-time great crew chiefs and owners, broadcasters and other major contributors to competition within the sanctioning body.",
                     ImageUrl = "https://media.istockphoto.com/id/854657408/photo/nascar-hall-of-fame-in-charlotte-north-carolina-usa.jpg?s=612x612&w=0&k=20&c=5WNpQ-xkPjkUF8EQdVTw93fYsdmurJe4SRQf7m4kCmE=",
                     ImageAltText = "A picture of the NASCAR Hall of Fame building, in Charlotte, North Carolina.",
+                },
+                new PointOfInterest("Cromwell Museum")
+                {
+                    Id = 5,
+                    CityId = 5,
+                    Description = "The Cromwell Museum in Huntingdon, England, is a museum containing collections exploring the life of Oliver Cromwell and to a lesser extent his son Richard Cromwell. Oliver Cromwell was born in Huntingdon in 1599 and lived there for more than half his life.",
+                    ImageUrl = "https://letsgowiththechildren.co.uk/wp-content/uploads/2022/03/cromwell-museum-915x515.jpg",
+                    ImageAltText = "A picture of the Cromwell Museum, taken outside.",
+                },
+                new PointOfInterest("Oceanopolis")
+                {
+                    Id = 6,
+                    CityId = 6,
+                    Description = "Aquarium with marine wildlife in tropical, temperate & polar zones, including 7 shark species.",
+                    ImageUrl = "https://www.brestaim-events.com/wp-content/uploads/2016/03/OCEANOPOLIS_1.jpg",
+                    ImageAltText = "A picture taken from inside the aquarium, with a group of people enjoying the experience.",
                 });
             base.OnModelCreating(modelBuilder);
         }
