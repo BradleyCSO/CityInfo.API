@@ -1,6 +1,7 @@
 ﻿using CityInfo.API.Entities;
+using CityInfo.API.Models.Responses;
 
-namespace CityInfo.API.Services
+namespace CityInfo.API.Services.IServices
 {
     // Persistence logic
     public interface ICityInfoRepository
@@ -9,7 +10,7 @@ namespace CityInfo.API.Services
         Task<IEnumerable<string>> GetContinentsAsync();
         Task<IEnumerable<object>> GetCountriesAsync();
         Task<IEnumerable<City>> GetCitiesAsync();
-        Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(string? name, string? searchQuery, string? continent, string?[] countries, int pageNumber, int pageSize);
+        Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(SearchQuery searchQuery);
         Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest);
         Task<bool> CityExistsAsync(int cityId);
         Task<PointOfInterest?> GetPointOfInterestForCityAsync(

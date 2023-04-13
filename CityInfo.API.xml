@@ -13,17 +13,17 @@
             <returns>An IActionResult</returns>
             <response code="200">Returns the requested city</response>
         </member>
-        <member name="P:CityInfo.API.Models.CityWithoutPointsOfInterestDto.Id">
+        <member name="P:CityInfo.API.Models.DTOs.CityWithoutPointsOfInterestDto.Id">
             <summary>
             The id of the City
             </summary>
         </member>
-        <member name="P:CityInfo.API.Models.CityWithoutPointsOfInterestDto.Name">
+        <member name="P:CityInfo.API.Models.DTOs.CityWithoutPointsOfInterestDto.Name">
             <summary>
             The name of the City
             </summary>
         </member>
-        <member name="P:CityInfo.API.Models.CityWithoutPointsOfInterestDto.Description">
+        <member name="P:CityInfo.API.Models.DTOs.CityWithoutPointsOfInterestDto.Description">
             <summary>
             The description of the City
             </summary>

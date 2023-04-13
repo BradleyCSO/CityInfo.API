@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using CityInfo.API.Models;
-using CityInfo.API.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using CityInfo.API.Models.DTOs;
+using CityInfo.API.Services.IServices;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +68,7 @@ namespace CityInfo.API.Controllers
             return Ok(_mapper.Map<PointOfInterestDto>(pointOfInterest));
         }
 
+        // Here we are creating a new db entry hence the need for PointOfInterestCreationDto/DB object
         [HttpPost]
         public async Task<ActionResult<PointOfInterestDto>> CreatePointOfInterest(
             int cityId,
@@ -109,6 +108,7 @@ namespace CityInfo.API.Controllers
             //}
         }
 
+        // Here we are creating a new db entry hence the need for PointOfInterestForUpdateDto/DB object
         [HttpPut("{pointofinterestid}")]
         public async Task<ActionResult> UpdatePointOfInterest(int cityId, int pointOfInterestId,
             PointOfInterestForUpdateDto pointOfInterest)
@@ -134,6 +134,7 @@ namespace CityInfo.API.Controllers
             return NoContent();
         }
 
+        // Here we are creating a new db entry hence the need for PointOfInterestForUpdateDto/DB object
         [HttpPatch("{pointofinterestid}")]
         public async Task<ActionResult> PartiallyUpdatePointOfInterest(int cityId, int pointOfInterestId,
                     JsonPatchDocument<PointOfInterestForUpdateDto> patchDocument) // JSON patch document being the list of operations that we want to apply to the point of interest

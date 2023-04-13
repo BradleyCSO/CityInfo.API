@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using CityInfo.API.Entities;
-using CityInfo.API.Models;
-using CityInfo.API.Services;
-using Microsoft.AspNetCore.Authorization;
+using CityInfo.API.Models.DTOs;
+using CityInfo.API.Models.Responses;
+using CityInfo.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -55,17 +54,22 @@ namespace CityInfo.API.Controllers
         }
 
 
+        // Route same as [Route("api/v{version:apiVersion}/cities")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities(
-            [FromQuery] string? name, string? searchQuery, string? continent, [FromQuery] string[]? countries, int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities([FromQuery] SearchQuery searchQuery)
         {
-            if (pageSize > maxCitiesPageSize)
+            if (!ModelState.IsValid)
             {
-                pageSize = maxCitiesPageSize;
+                return BadRequest(ModelState);
+            }
+
+            if (searchQuery.TotalPageCount > maxCitiesPageSize)
+            {
+                searchQuery.TotalPageCount = maxCitiesPageSize;
             }
 
             var (cityEntities, paginationMetadata) = 
-                await _cityInfoRepository.GetCitiesAsync(name, searchQuery, continent, countries, pageNumber, pageSize);
+                await _cityInfoRepository.GetCitiesAsync(searchQuery);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
             Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
