@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using CityInfo.API.Models;
 using CityInfo.API.Models.DTOs;
 using CityInfo.API.Models.Responses;
 using CityInfo.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Web.Http;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace CityInfo.API.Controllers
 {
@@ -55,8 +59,9 @@ namespace CityInfo.API.Controllers
 
 
         // Route same as [Route("api/v{version:apiVersion}/cities")]
+        //
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities([FromQuery] SearchQuery searchQuery)
+        public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities([ModelBinder(BinderType = typeof(SearchQueryBinder))] SearchQuery searchQuery)
         {
             if (!ModelState.IsValid)
             {
