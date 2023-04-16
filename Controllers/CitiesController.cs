@@ -5,7 +5,6 @@ using CityInfo.API.Models.Responses;
 using CityInfo.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using System.Web.Http;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
