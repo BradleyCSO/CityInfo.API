@@ -3,10 +3,10 @@ name: Build and Test .NET Core App
 on:
   push:
     branches:
-      - master
+      - devel
   pull_request:
     branches:
-      - master
+      - devel
 
 jobs:
   build-and-test:
