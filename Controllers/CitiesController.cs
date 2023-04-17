@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CityInfo.API.Models;
 using CityInfo.API.Models.DTOs;
 using CityInfo.API.Models.Responses;
 using CityInfo.API.Services.IServices;
@@ -56,18 +55,17 @@ namespace CityInfo.API.Controllers
             return Ok(countries);
         }
 
-
-        // Route same as [Route("api/v{version:apiVersion}/cities")]
-        //
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities([ModelBinder(BinderType = typeof(SearchQueryBinder))] SearchQuery searchQuery)
+        public async Task<ActionResult<IEnumerable<CityWithoutPointsOfInterestDto>>> GetCities([FromQuery] SearchQuery searchQuery)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (searchQuery.TotalPageCount > maxCitiesPageSize)
+            if (searchQuery.PageSize == 0){ searchQuery.PageSize = maxCitiesPageSize; }
+
+            if (searchQuery?.TotalPageCount > maxCitiesPageSize)
             {
                 searchQuery.TotalPageCount = maxCitiesPageSize;
             }
@@ -78,59 +76,35 @@ namespace CityInfo.API.Controllers
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
             Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
 
-            return Ok(_mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities));
-
-            //var results = new List<CityWithoutPointsOfInterestDto>();
-
-            //foreach (var cityEntity in cityEntities)
-            //{
-            //    results.Add(new CityWithoutPointsOfInterestDto
-            //    {
-            //        Id = cityEntity.Id,
-            //        Name = cityEntity.Name,
-            //        Description = cityEntity.Description,
-            //    });
-            //}
-
-            //return Ok(results);
-            //return Ok(_citiesDataStore.Cities); // No not found as an empty collection would be a valid response body
+            return Ok(_mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities)); // No not found as an empty collection would be a valid response body
         }
 
         /// <summary>
         /// Get a city by id
         /// </summary>
-        /// <param name="id">The id of the city to get</param>
-        /// <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
+        /// <param name="searchQuery">The search query model built via querystring</param>
         /// <returns>An IActionResult</returns>
         /// <response code="200">Returns the requested city</response>
-        [HttpGet("{id}")]
+        [Route("GetCity")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCity(int id, bool includePointsOfInterest = false)
+        public async Task<IActionResult> GetCity([FromQuery] SearchQuery searchQuery)
         {
-            var city = await _cityInfoRepository.GetCityAsync(id, includePointsOfInterest);
+            var city = await _cityInfoRepository.GetCityAsync(searchQuery);
 
             if (city == null)
             {
                 return NotFound();
             }
 
-            if (includePointsOfInterest)
+            if (searchQuery?.PointOfInterestQuery?.IncludePointsOfInterest ?? false)
             {
-                return Ok(_mapper.Map<CityDto>(city)); // Map cities WITH points of interest
+                return Ok(_mapper.Map<CityDto>(city));
             }
 
-            return Ok(_mapper.Map<CityWithoutPointsOfInterestDto>(city)); // Otherwise map cities without points of interest
-
-            //var cityToReturn = _citiesDataStore.Cities.FirstOrDefault(get => get.Id == id);
-
-            //if (cityToReturn == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return Ok(cityToReturn);
+            return Ok(_mapper.Map<CityWithoutPointsOfInterestDto>(city));
         }
     }
 }
