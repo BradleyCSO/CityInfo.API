@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CityInfo.API.Models.DTOs;
 
 namespace CityInfo.API.Profiles
 {
@@ -6,8 +7,8 @@ namespace CityInfo.API.Profiles
     {
         public CityProfile()
         {
-            CreateMap<Entities.City, Models.CityWithoutPointsOfInterestDto>();
-            CreateMap<Entities.City, Models.CityDto>();
+            CreateMap<Entities.City, CityWithoutPointsOfInterestDto>();
+            CreateMap<Entities.City, CityDto>();
         }
     }
 }

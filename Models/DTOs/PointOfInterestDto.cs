@@ -1,4 +1,4 @@
-﻿namespace CityInfo.API.Models
+﻿namespace CityInfo.API.Models.DTOs
 {
     public class PointOfInterestDto
     {

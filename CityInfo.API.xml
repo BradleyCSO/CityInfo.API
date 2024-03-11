@@ -4,26 +4,25 @@
         <name>CityInfo.API</name>
     </assembly>
     <members>
-        <member name="M:CityInfo.API.Controllers.CitiesController.GetCity(System.Int32,System.Boolean)">
+        <member name="M:CityInfo.API.Controllers.CitiesController.GetCity(CityInfo.API.Models.Responses.SearchQuery)">
             <summary>
             Get a city by id
             </summary>
-            <param name="id">The id of the city to get</param>
-            <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
+            <param name="searchQuery">The search query model built via querystring</param>
             <returns>An IActionResult</returns>
             <response code="200">Returns the requested city</response>
         </member>
-        <member name="P:CityInfo.API.Models.CityWithoutPointsOfInterestDto.Id">
+        <member name="P:CityInfo.API.Models.DTOs.CityWithoutPointsOfInterestDto.Id">
             <summary>
             The id of the City
             </summary>
         </member>
-        <member name="P:CityInfo.API.Models.CityWithoutPointsOfInterestDto.Name">
+        <member name="P:CityInfo.API.Models.DTOs.CityWithoutPointsOfInterestDto.Name">
             <summary>
             The name of the City
             </summary>
         </member>
-        <member name="P:CityInfo.API.Models.CityWithoutPointsOfInterestDto.Description">
+        <member name="P:CityInfo.API.Models.DTOs.CityWithoutPointsOfInterestDto.Description">
             <summary>
             The description of the City
             </summary>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CityInfo.API.Models.DTOs;
 
 namespace CityInfo.API.Profiles
 {
@@ -6,14 +7,14 @@ namespace CityInfo.API.Profiles
     {
         public PointOfInterestProfile()
         {
-            CreateMap<Entities.PointOfInterest, Models.PointOfInterestDto>();
+            CreateMap<Entities.PointOfInterest, PointOfInterestDto>();
 
             // PointOfInterest has more properties than PointOfInterestCreationDto, but AutoMapper ignores these
-            CreateMap<Models.PointOfInterestForCreationDto, Entities.PointOfInterest>();
+            CreateMap<PointOfInterestForCreationDto, Entities.PointOfInterest>();
 
-            CreateMap<Models.PointOfInterestForUpdateDto, Entities.PointOfInterest>();
+            CreateMap<PointOfInterestForUpdateDto, Entities.PointOfInterest>();
 
-            CreateMap<Entities.PointOfInterest, Models.PointOfInterestForUpdateDto>();
+            CreateMap<Entities.PointOfInterest, PointOfInterestForUpdateDto>();
         }
     }
 }

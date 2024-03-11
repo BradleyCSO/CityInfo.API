@@ -1,6 +1,7 @@
 ﻿using CityInfo.API.DbContexts;
 using CityInfo.API.Entities;
-using Microsoft.AspNetCore.Mvc;
+using CityInfo.API.Models.Responses;
+using CityInfo.API.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.API.Services
@@ -11,7 +12,7 @@ namespace CityInfo.API.Services
 
         public CityInfoRepository(CityInfoContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context)); ;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<IEnumerable<City>> GetCitiesAsync()
@@ -19,60 +20,55 @@ namespace CityInfo.API.Services
             return await _context.Cities.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<bool> CityNameMatchesCityId(int cityId, string? cityName)
+        public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(SearchQuery searchQuery)
         {
-            return await _context.Cities.AnyAsync(c => c.Id == cityId && c.Name == cityName);
-        }
-
-        public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
-            string? name, string? searchQuery, string? continent, [FromQuery] string[]? countries, int pageNumber, int pageSize)
-        {
-            // Collection to start from, for deferred execution
             var collection = _context.Cities as IQueryable<City>;
-            IQueryable<City> cityCollection = Enumerable.Empty<City>().AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrWhiteSpace(searchQuery?.CityQuery?.Name))
             {
-                name = name.Trim();
-                collection = collection.Where(c => c.Name == name);
+                searchQuery.CityQuery.Name = searchQuery.CityQuery.Name.Trim();
+                collection = collection.Where(c => c.Name == searchQuery.CityQuery.Name);
             }
 
-            if (!string.IsNullOrWhiteSpace(searchQuery))
+            if (!string.IsNullOrWhiteSpace(searchQuery?.Query))
             {
-                searchQuery = searchQuery.Trim();
-                collection = collection.Where(a => a.Name.Contains(searchQuery)
-                || (a.Description != null && a.Description.Contains(searchQuery)));
+                searchQuery.Query = searchQuery.Query.Trim();
+                collection = collection.Where(a => a.Name.Contains(searchQuery.Query)
+                || (a.Description != null && a.Description.Contains(searchQuery.Query)));
             }
 
-            if (!string.IsNullOrWhiteSpace(continent))
+            if (!string.IsNullOrWhiteSpace(searchQuery?.CityQuery?.Continent))
             {
-                searchQuery = continent.Trim();
-                collection = collection.Where(c => c.Continent == continent);
+                searchQuery.CityQuery.Continent = searchQuery.CityQuery.Continent.Trim();
+                collection = collection.Where(c => c.Continent == searchQuery.CityQuery.Continent);
             }
 
-            if (countries.Any())
+            if (searchQuery?.CityQuery?.Countries?.Any() ?? false)
             {
-                collection = collection.Where(c => countries.Contains(c.Country));
+                collection = collection.Where(c => searchQuery.CityQuery.Countries.Contains(c.Country));
             }
 
             var totalItemCount = await collection.CountAsync();
 
             var paginationMetadata = new PaginationMetadata(
-                totalItemCount, pageSize, pageNumber);
+                totalItemCount, searchQuery?.PageSize ?? 0, searchQuery?.CurrentPage ?? 0);
 
             var collectionToReturn = await collection
                 .OrderBy(c => c.Name)
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize)
+                .Skip(1 * (searchQuery?.CurrentPage - 1 ?? 0))
+                .Take(searchQuery?.PageSize ?? 0)
                 .ToListAsync();
-
 
             return (collectionToReturn, paginationMetadata);
         }
 
-        public async Task<bool> CityExistsAsync(int cityId)
+        public async Task<bool> CityNameMatchesCityId(SearchQuery searchQuery)
         {
-            return await _context.Cities.AnyAsync(c => c.Id == cityId);
+            return await _context.Cities.AnyAsync(c => c.Id == searchQuery.CityQuery.Id && c.Name == searchQuery.CityQuery.Name);
+        }
+        public async Task<bool> CityExistsAsync(SearchQuery searchQuery)
+        {
+            return await _context.Cities.AnyAsync(c => c.Id == searchQuery.CityQuery.Id);
         }
 
         public async Task<IEnumerable<string>> GetContinentsAsync()
@@ -85,41 +81,40 @@ namespace CityInfo.API.Services
             return await _context.Cities.Select(c => new { Country = c.Country, Continent = c.Continent }).Distinct().ToListAsync();
         }
 
-        public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
+        public async Task<City?> GetCityAsync(SearchQuery searchQuery)
         {
-            if (includePointsOfInterest)
+            if (searchQuery?.PointOfInterestQuery?.IncludePointsOfInterest ?? false)
             {
                 return await _context.Cities.Include(c => c.PointsOfInterest)
-                    .Where(c => c.Id == cityId).FirstOrDefaultAsync();
+                    .Where(c => c.Id == searchQuery.CityQuery.Id).FirstOrDefaultAsync();
             }
 
             return await _context.Cities
-                .Where(c => c.Id == cityId).FirstOrDefaultAsync();
+                .Where(c => c.Id == searchQuery.CityQuery.Id).FirstOrDefaultAsync();
         }
 
         public async Task<PointOfInterest?> GetPointOfInterestForCityAsync(
-            int cityId, int pointOfInterestId)
+            SearchQuery searchQuery)
         {
             return await _context.PointsOfInterests
-                .Where(p => p.CityId == cityId && p.Id == pointOfInterestId)
+                .Where(p => p.CityId == searchQuery.CityQuery.Id || p.Id == searchQuery.PointOfInterestQuery.Id)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(
-            int cityId)
+        public async Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(SearchQuery searchQuery)
         {
             return await _context.PointsOfInterests
-                .Where(p => p.CityId == cityId).ToListAsync();
+                .Where(p => p.CityId == searchQuery.CityQuery.Id).ToListAsync();
         }
 
-        public async Task AddPointOfInterestForCityAsync(int cityId, 
-            PointOfInterest pointOfInterest)
+        public async Task AddPointOfInterestForCityAsync(SearchQuery searchQuery)
         {
-            var city = await GetCityAsync(cityId, false);
+            var city = await GetCityAsync(searchQuery);
 
-            if (city != null)
+            if (city != null && 
+                searchQuery?.PointOfInterestQuery?.PointOfInterest != null)
             {
-                city.PointsOfInterest.Add(pointOfInterest);
+                city?.PointsOfInterest.Add(searchQuery.PointOfInterestQuery.PointOfInterest);
             }
         }
 
